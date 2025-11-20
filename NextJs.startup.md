@@ -1,6 +1,5 @@
 Project Goal
 Build a polished single‑page application (SPA) 
-Named: <PROVIDE_NAME_HERE>. 
 The SPA should be built with latest Next.js using app router, TypeScript, Tailwind 4+, and Turbopack as the bundler.
 
 Content & Structure

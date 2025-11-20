@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import fs from 'fs';
 import path from 'path';
 import inquirer from 'inquirer';
@@ -8,6 +10,16 @@ const __dirname = path.dirname(__filename);
 
 // Path to the base prompt file
 const BASE_PROMPT_PATH = path.join(__dirname, '..', 'NextJs.startup.md');
+// Path to the target directory
+const TARGET_DIR = path.join(__dirname, '..', 'target');
+
+// Helper function to sanitize project name for filename
+function sanitizeFilename(name) {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
 
 async function main() {
   try {
@@ -76,13 +88,45 @@ The new prompt should:
 4. Improve the clarity and robustness of the instructions.
 `;
 
-    console.log('\n' + '='.repeat(50));
-    console.log('GENERATED META-PROMPT (Copy and paste this to an AI):');
-    console.log('='.repeat(50) + '\n');
-    console.log(metaPrompt);
+    // Ensure target directory exists
+    if (!fs.existsSync(TARGET_DIR)) {
+      fs.mkdirSync(TARGET_DIR, { recursive: true });
+    }
+
+    // Generate filename from project name
+    const sanitizedName = sanitizeFilename(answers.projectName);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+    const filename = `${sanitizedName}-${timestamp}.md`;
+    const filePath = path.join(TARGET_DIR, filename);
+
+    // Write the metaprompt to file
+    try {
+      fs.writeFileSync(filePath, metaPrompt.trim(), 'utf-8');
+      console.log('\n' + '='.repeat(50));
+      console.log('✅ META-PROMPT GENERATED AND SAVED!');
+      console.log('='.repeat(50));
+      console.log(`\n📄 File saved to: ${filePath}\n`);
+      console.log('='.repeat(50));
+      console.log('GENERATED META-PROMPT:');
+      console.log('='.repeat(50) + '\n');
+      console.log(metaPrompt);
+    } catch (error) {
+      console.error(`\n❌ Error saving file to ${filePath}:`, error.message);
+      console.log('\n' + '='.repeat(50));
+      console.log('GENERATED META-PROMPT (Copy and paste this to an AI):');
+      console.log('='.repeat(50) + '\n');
+      console.log(metaPrompt);
+      process.exit(1);
+    }
 
   } catch (error) {
-    console.error('An error occurred:', error);
+    // Handle user cancellation gracefully
+    if (error.name === 'ExitPromptError' || error.message?.includes('User force closed')) {
+      console.log('\n\nOperation cancelled.');
+      process.exit(0);
+    }
+    console.error('An error occurred:', error.message || error);
+    process.exit(1);
   }
 }
 
