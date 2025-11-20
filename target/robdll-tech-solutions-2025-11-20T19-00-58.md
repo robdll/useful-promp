@@ -27,14 +27,15 @@ Other info:
 
 Here are the specific details for my project that need to be incorporated and override any generic placeholders:
 
-- **Project Name**: RobDllTechSolutions
-- **Description**: target: small businesses without a website. Service: landing creation, hosting, and support in content generation.
-- **Design Style**: glassmorphism with soft animations
+- **Project Name**: RobDll Tech Solutions
+- **Description**: small businesses without a website. Service: landing creation, hosting, and support in content generation.
+- **Design Style**: tech oriented, futuristic, professional
+- **Style Implementation Guide**: tech oriented, futuristic, professional
 
 Please act as an expert software architect and prompt engineer. 
 Take the "base technical requirement" above and rewrite it into a single, comprehensive, and improved prompt that I can give to an AI coding assistant. 
 The new prompt should:
 1. Integrate the project name, description, and style into the requirements.
-2. Expand on the design style with specific Tailwind CSS suggestions relevant to "glassmorphism with soft animations".
+2. Apply the "Style Implementation Guide" above with specific Tailwind CSS classes and design patterns.
 3. Keep all the technical constraints (Next.js, App Router, TypeScript, Tailwind 4+, Turbopack, component organization, etc.).
 4. Improve the clarity and robustness of the instructions.
